@@ -8,6 +8,11 @@ app.secret_key = 'f9b2ac7d8abed6c6c7b5e8bc92cd3c52dbfdb4eaf9c2f9b5a1d8f24f7e8a1b
 # Fake database for demo purposes
 users = {}
 
+
+# Example of setting session['solution'] when generating a new puzzle
+
+
+
 # Generate a random Sudoku puzzle (for simplicity, not solving it fully)
 def generate_sudoku():
     grid = [[0] * 9 for _ in range(9)]  # Create an empty 9x9 grid
@@ -119,30 +124,39 @@ def logout():
     session.pop('username', None)
     session.pop('solution', None)
     return redirect(url_for('login'))
-
 @app.route('/check_solution', methods=['POST'])
 def check_solution():
+    # Handle the user's solution here
     user_solution = []
-
-    # Collect the user input from the form
     for i in range(9):
         row = []
         for j in range(9):
-            # Grab the value from the form input by its name (cell-i-j)
             cell_value = request.form.get(f'cell-{i}-{j}')
-            
-            # If the user input is empty or not an integer, treat it as 0
-            if cell_value:
-                row.append(int(cell_value))
-            else:
-                row.append(0)
+            row.append(int(cell_value) if cell_value else 0)
         user_solution.append(row)
-
-    # Check if the user's solution matches the actual solution
+    
     if is_solved(session['solution'], user_solution):
-        return render_template('sudoku.html', message="Congratulations! You solved the puzzle!", puzzle=session['solution'])
+        message = "Congratulations! You solved the puzzle!"
     else:
-        return render_template('sudoku.html', message="Oops! Incorrect solution, try again.", puzzle=session['solution'])
+        message = "Oops! Incorrect solution, try again."
+    
+    return render_template('sudoku.html', message=message, puzzle=session['solution'])
+
+
+# Function to check if the solution is correct
+def is_solved(actual_solution, user_solution):
+    # Compare the actual solution with the user input solution
+    return actual_solution == user_solution
+
+
+@app.route('/reset', methods=['GET'])
+def reset():
+    if 'username' in session:
+        puzzle, solution = generate_sudoku()
+        session['solution'] = solution  # Store the solution in the session
+        return render_template('sudoku.html', puzzle=puzzle)
+    return redirect(url_for('login'))
+
 
 
 

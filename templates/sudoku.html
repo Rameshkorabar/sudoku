@@ -208,101 +208,101 @@
     {% endif %}
 
     <form method="POST" action="{{ url_for('check_solution') }}">
-      <div id="sudoku-grid">
-        {% for row in puzzle %}
-        <div class="sudoku-row">
-          {% for cell in row %}
-          <input
-            type="text"
-            name="cell-{{ loop.index0 }}-{{ loop.index }}"
-            value="{{ cell }}"
-            class="sudoku-cell"
-            {%
-            if
-            cell
-            !="0"
-            %}readonly{%
-            endif
-            %}
-          />
-          {% endfor %}
-        </div>
-        {% endfor %}
-      </div>
-
-      <!-- Submit button to check solution -->
-    </form>
-    <div class="btns">
-      <button type="submit">Check Solution</button>
+  <div id="sudoku-grid">
+    {% for row in puzzle %}
+    <div class="sudoku-row">
+      {% for cell in row %}
+      <input
+        type="text"
+        name="cell-{{ loop.index0 }}-{{ loop.index }}"
+        value="{{ cell }}"
+        class="sudoku-cell"
+        {% if cell != 0 %}readonly{% endif %}
+      />
+      {% endfor %}
     </div>
+    {% endfor %}
+  </div>
+  <!-- Submit button to check solution -->
+</form>
+<div class="btns">
+  <button type="submit">Check Solution</button>
+  <button onclick="window.location.href='{{ url_for('reset') }}'">Reset Puzzle</button>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const cells = document.querySelectorAll(".sudoku-cell");
+</div>
 
-        // Add focus event to highlight cells
-        cells.forEach((cell) => {
-          cell.addEventListener("focus", (e) => {
-            e.target.style.backgroundColor = "#e0e0e0";
-          });
-          cell.addEventListener("blur", (e) => {
-            e.target.style.backgroundColor = "";
-          });
-        });
 
-        // Adding real-time feedback while user inputs numbers
-        const submitButton = document.querySelector("button[type='submit']");
-        submitButton.addEventListener("click", () => {
-          validateSolution();
-        });
 
-        // Validate the current user solution
-        function validateSolution() {
-          let isValid = true;
-          const solutionCells = document.querySelectorAll(".sudoku-cell");
-          solutionCells.forEach((cell) => {
-            const value = cell.value;
-            if (
-              (value !== "" && !Number.isInteger(Number(value))) ||
-              Number(value) < 1 ||
-              Number(value) > 9
-            ) {
-              isValid = false;
-              cell.style.backgroundColor = "#f8d7da"; // Red highlight for incorrect cells
-            } else {
-              cell.style.backgroundColor = ""; // Reset color for valid cells
-            }
-          });
 
-          if (isValid) {
-            // Call Flask's check_solution if all cells are filled correctly
-            alert("Solution looks good! Checking...");
-            // You could trigger form submission here or let the backend handle it
-          } else {
-            alert("Some values are incorrect. Please check again.");
-          }
+
+  
+ <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cells = document.querySelectorAll(".sudoku-cell");
+    const submitButton = document.querySelector("button[type='submit']");
+    const form = document.querySelector("form");
+
+    // Add focus event to highlight cells
+    cells.forEach((cell) => {
+      cell.addEventListener("focus", (e) => {
+        e.target.style.backgroundColor = "#e0e0e0";
+      });
+      cell.addEventListener("blur", (e) => {
+        e.target.style.backgroundColor = "";
+      });
+    });
+
+    // Add event listener to the submit button
+    submitButton.addEventListener("click", (e) => {
+      e.preventDefault();  // Prevent default form submission
+      validateSolution();  // Validate the solution
+    });
+
+    // Validate the current user solution
+    function validateSolution() {
+      let isValid = true;
+      const solutionCells = document.querySelectorAll(".sudoku-cell");
+
+      solutionCells.forEach((cell) => {
+        const value = cell.value;
+        if (
+          (value !== "" && !Number.isInteger(Number(value))) ||
+          Number(value) < 1 ||
+          Number(value) > 9
+        ) {
+          isValid = false;
+          cell.style.backgroundColor = "#f8d7da"; // Red highlight for incorrect cells
+        } else {
+          cell.style.backgroundColor = ""; // Reset color for valid cells
         }
+      });
+
+      if (isValid) {
+        // Form submission after validation passes
+        form.submit();
+      } else {
+        alert("Some values are incorrect. Please check again.");
+      }
+    }
+  });
+
+
 
         // Optionally, add a "reset" button to clear the form
-        const resetButton = document.createElement("button");
-        resetButton.textContent = "Reset Puzzle";
-        resetButton.style.display = "flex";
-        resetButton.style.justifyContent = "center";
-        resetButton.style.margin = "20px auto"; // Optional: Center the button horizontally with margin
-        resetButton.style.padding = "10px 20px"; // Optional: Add some padding for better appearance
-        resetButton.style.fontSize = "16px";
-        resetButton.style.alignItems = "center";
-        document.body.appendChild(resetButton);
+      
 
-        resetButton.addEventListener("click", () => {
-          cells.forEach((cell) => {
-            if (cell.hasAttribute("readonly")) return;
-            cell.value = ""; // Clear all cells for user input
-            cell.style.backgroundColor = ""; // Reset any background color
-          });
-          alert("Puzzle has been reset.");
+      document.addEventListener('DOMContentLoaded', () => {
+    // Example: add animation to Sudoku grid cells
+    const cells = document.querySelectorAll('.sudoku-cell');
+    cells.forEach(cell => {
+        cell.addEventListener('focus', (e) => {
+            e.target.style.backgroundColor = "#e0e0e0";
         });
-      });
+        cell.addEventListener('blur', (e) => {
+            e.target.style.backgroundColor = "red";
+        });
+    });
+});
     </script>
   </body>
 </html>
