@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f7;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Sign up container styles */
+        .signup-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            color: #333;
+            font-size: 2rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 1.2rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            color: white;
+            background-color: red;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        /* Media Queries for Responsive Design */
+        @media screen and (max-width: 1024px) {
+            h2 {
+                font-size: 1.8rem;
+            }
+            .signup-container {
+                padding: 1.5rem;
+            }
+            input, button {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            h2 {
+                font-size: 1.6rem;
+            }
+            .signup-container {
+                padding: 1.2rem;
+                max-width: 90%;
+            }
+            input, button {
+                font-size: 0.9rem;
+                padding: 0.9rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            h2 {
+                font-size: 1.4rem;
+            }
+            .signup-container {
+                padding: 1rem;
+                max-width: 90%;
+            }
+            input, button {
+                font-size: 0.9rem;
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        
+        <!-- Show the error message if it exists -->
+        {% if error %}
+            <div class="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+        
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+    </div>
+</body>
+</html>
