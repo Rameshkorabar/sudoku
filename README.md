@@ -1,2 +1,1 @@
-"# final_sudoku" 
-"# sudoku_python" 
+"# python_sudoku" 
